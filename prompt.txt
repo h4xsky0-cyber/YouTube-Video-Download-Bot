@@ -1,0 +1,431 @@
+
+
+✅ MASTER PROMPT — Advanced Telegram YouTube Downloader Bot (yt-dlp + Settings System)
+
+Create a production-ready Telegram bot in Python using:
+
+Python 3.10+
+
+python-telegram-bot (latest async v20+ style)
+
+yt-dlp (mandatory, never use pytube)
+
+FFmpeg (required)
+
+
+The bot must be stable, asynchronous, and written like a real-world application with proper state management and error handling.
+
+
+---
+
+🎯 CORE FEATURES (ALL REQUIRED)
+
+Bot must support:
+
+YouTube video downloads
+
+YT → MP3 conversion
+
+Thumbnail download
+
+Song search by name
+
+Dynamic quality selection
+
+Document-only uploads (no compression)
+
+Progress updates
+
+Robust error handling
+
+User settings system
+
+
+
+---
+
+
+---
+
+🎛 SETTINGS SYSTEM (CRITICAL FEATURE)
+
+Bot must include a persistent per-user Settings menu.
+
+Command:
+
+/settings
+
+Opens an inline keyboard menu.
+
+
+---
+
+⚙ SETTINGS MENU OPTIONS
+
+Display buttons:
+
+🎬 Default Video Quality
+
+🧹 Cleanup Timer
+
+🔁 Download Mode
+
+❌ Close
+
+
+Settings must be stored per user (dictionary / lightweight DB / JSON / memory cache).
+
+
+---
+
+
+---
+
+🎬 DEFAULT VIDEO QUALITY SETTING
+
+When user taps Default Video Quality:
+
+Show options:
+
+360p
+
+480p
+
+720p
+
+1080p
+
+Best Available
+
+
+Selection behavior:
+
+This becomes user's fixed default quality
+
+Future downloads use this automatically
+
+Bot must attempt closest match if exact resolution unavailable
+
+
+Example logic:
+
+If user selects 720p → every video downloads in 720p without asking.
+
+If unavailable → choose nearest lower/higher best match.
+
+
+---
+
+
+---
+
+🔁 DOWNLOAD MODE (VERY IMPORTANT)
+
+When user taps Download Mode:
+
+Show:
+
+✅ Fixed Quality (use default)
+
+🎛 Manual Selection
+
+
+Behavior:
+
+✅ Fixed Quality Mode
+
+Bot skips quality menu
+
+Directly downloads using user's default resolution
+
+
+🎛 Manual Selection Mode
+
+Bot shows dynamic quality buttons extracted from yt-dlp formats
+
+Sorted lowest → highest
+
+Never hardcoded
+
+
+This gives user full control.
+
+
+---
+
+
+---
+
+🧹 CLEANUP TIMER SETTING (IMPORTANT)
+
+When user taps Cleanup Timer:
+
+Show options:
+
+5 Minutes
+
+10 Minutes
+
+15 Minutes
+
+30 Minutes
+
+♾ Never
+
+
+Behavior:
+
+This setting controls auto deletion of downloaded files from server.
+
+Rules:
+
+Timer starts AFTER successful download
+
+Files stored temporarily
+
+Background cleanup task removes expired files
+
+
+If:
+
+♾ Never → file remains on server
+
+Otherwise → auto delete after chosen duration.
+
+
+---
+
+
+---
+
+🎥 VIDEO DOWNLOAD FLOW
+
+When user sends a YouTube link:
+
+1. Validate URL
+
+
+2. Extract metadata via yt-dlp (no download yet)
+
+
+3. Show main choices:
+
+
+
+🎬 Video
+
+🎵 Audio (MP3)
+
+🖼 Thumbnail
+
+❌ Cancel
+
+
+
+---
+
+🎬 VIDEO LOGIC
+
+Check user settings:
+
+IF mode = Fixed Quality:
+
+Use saved default resolution
+
+Skip quality menu
+
+Download directly
+
+
+IF mode = Manual:
+
+Parse available resolutions dynamically
+
+Show quality buttons (144p → … → highest)
+
+
+Rules:
+
+Prefer MP4
+
+Merge audio/video if needed
+
+Avoid invalid formats
+
+
+Send as reply_document()
+
+
+---
+
+
+---
+
+🎵 AUDIO / MP3 FLOW
+
+Must:
+
+Extract audio via FFmpeg
+
+Show dynamic bitrate options OR use best available
+
+Send as document
+
+
+
+---
+
+
+---
+
+🖼 THUMBNAIL FLOW
+
+Must:
+
+Extract thumbnail URL from metadata
+
+Download image
+
+Send as document
+
+
+
+---
+
+
+---
+
+🔎 SEARCH BY SONG NAME
+
+If user sends text (not URL):
+
+Use yt-dlp ytsearch
+
+Fetch top 5
+
+Display clickable results
+
+Continue normal flow
+
+
+
+---
+
+
+---
+
+📈 DOWNLOAD PROGRESS
+
+Implement yt-dlp progress hooks.
+
+Bot edits message showing:
+
+⬇ Downloading…
+Percentage
+Speed
+ETA
+
+
+---
+
+
+---
+
+⚠ ERROR HANDLING (MANDATORY)
+
+Gracefully handle:
+
+Invalid URL
+
+Private / deleted video
+
+Geo restriction
+
+Age restriction
+
+No formats
+
+FFmpeg errors
+
+Download failure
+
+
+Return friendly messages.
+
+
+---
+
+
+---
+
+🔒 TECHNICAL RULES
+
+Async architecture only
+
+No blocking calls
+
+Use yt-dlp Python API (never shell)
+
+Safe temporary storage
+
+Auto cleanup logic
+
+Clean, commented code
+
+
+Import example:
+
+from yt_dlp import YoutubeDL
+
+
+---
+
+
+---
+
+🧾 DOCUMENT-ONLY POLICY (CRITICAL)
+
+ALL outputs must be uploaded via:
+
+reply_document()
+
+Never send compressed media.
+
+
+---
+
+
+---
+
+🎁 FINAL OUTPUT REQUIREMENTS
+
+Generate:
+
+1. Complete runnable Python bot code
+
+
+2. requirements.txt
+
+
+3. Setup instructions
+
+
+4. FFmpeg dependency note
+
+
+5. Environment variable usage for token
+
+
+6. Fully working Settings system
+
+
+7. Persistent user preferences
+
+
+8. Cleanup timer logic
+
+
+
+DO NOT generate pseudo-code.
+DO NOT simplify logic.
+WRITE FULL IMPLEMENTATION.
